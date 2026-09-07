@@ -21,7 +21,7 @@ class LoadConfigTests(unittest.TestCase):
             config = Path(directory) / "sources.json"
             config.write_text("{}", encoding="utf-8")
 
-            with self.assertRaisesRegex(ValueError, "sources"):
+            with self.assertRaisesRegex(TypeError, "sources"):
                 load_config(config)
 
 
