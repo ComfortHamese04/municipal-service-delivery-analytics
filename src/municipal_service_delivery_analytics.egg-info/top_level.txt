@@ -1,5 +1,0 @@
-analysis
-api
-ingestion
-powerbi
-sql
