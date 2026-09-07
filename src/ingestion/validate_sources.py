@@ -31,7 +31,7 @@ def load_config(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as handle:
         payload = json.load(handle)
     if not isinstance(payload.get("sources"), list):
-        raise ValueError("Configuration must contain a 'sources' list")
+       raise TypeError("Configuration must contain a 'sources' list")
     return payload
 
 
