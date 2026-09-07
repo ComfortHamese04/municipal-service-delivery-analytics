@@ -13,6 +13,7 @@ htmlcov/
 *.suo
 bin/
 obj/
+*.egg-info/
 
 # Local data layers and generated metadata
 data/bronze/*
