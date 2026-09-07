@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+src/ingestion/__init__.py
+src/ingestion/validate_sources.py
+src/municipal_service_delivery_analytics.egg-info/PKG-INFO
+src/municipal_service_delivery_analytics.egg-info/SOURCES.txt
+src/municipal_service_delivery_analytics.egg-info/dependency_links.txt
+src/municipal_service_delivery_analytics.egg-info/requires.txt
+src/municipal_service_delivery_analytics.egg-info/top_level.txt
+tests/test_validate_sources.py

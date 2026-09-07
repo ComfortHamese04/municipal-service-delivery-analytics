@@ -1,0 +1,37 @@
+{
+  "sources": [
+    {
+      "id": "national_treasury_municipal_money",
+      "name": "Municipal Money API",
+      "provider": "South African National Treasury / Municipal Money",
+      "landing_url": "https://municipaldata.treasury.gov.za/docs",
+      "healthcheck_url": "https://municipaldata.treasury.gov.za/api",
+      "access_method": "JSON API and bulk downloads",
+      "refresh_classification": "quarterly",
+      "status": "validated",
+      "terms_status": "review_before_download"
+    },
+    {
+      "id": "stats_sa_ghs_2025",
+      "name": "General Household Survey 2025",
+      "provider": "Statistics South Africa",
+      "landing_url": "https://isibaloweb.statssa.gov.za/pages/surveys/pss/ghs/ghsp.php",
+      "healthcheck_url": "https://isibaloweb.statssa.gov.za/pages/surveys/pss/ghs/ghsp.php",
+      "access_method": "CSV plus metadata and questionnaire",
+      "refresh_classification": "annual",
+      "status": "validated_landing_page",
+      "terms_status": "review_before_download"
+    },
+    {
+      "id": "cape_town_open_data",
+      "name": "City of Cape Town Open Data Portal",
+      "provider": "City of Cape Town",
+      "landing_url": "https://www.capetown.gov.za/City-Connect/All-City-online-services/open-data-portal/",
+      "healthcheck_url": "https://www.capetown.gov.za/City-Connect/All-City-online-services/open-data-portal/",
+      "access_method": "CSV, ArcGIS REST and GIS files",
+      "refresh_classification": "dataset-dependent",
+      "status": "validated_landing_page",
+      "terms_status": "dataset_terms_required"
+    }
+  ]
+}
