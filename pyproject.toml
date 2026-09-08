@@ -7,7 +7,7 @@ name = "municipal-service-delivery-analytics"
 version = "0.1.0"
 description = "Reproducible ingestion and validation for municipal service-delivery analytics."
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["requests>=2.32,<3"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.6"]
