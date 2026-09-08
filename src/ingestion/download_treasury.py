@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,9 @@ DEFAULT_CUBE = "incexp_v2"
 DEFAULT_MUNICIPALITY = "CPT"
 DEFAULT_PAGE_SIZE = 1000
 
+def calculate_page_count(total_records: int, page_size: int) -> int:
+    """Calculate how many API pages are required."""
+    return math.ceil(total_records / page_size)
 
 def build_url(
     cube: str,
@@ -42,6 +46,40 @@ def fetch_json(url: str) -> dict[str, Any]:
     )
     response.raise_for_status()
     return response.json()
+
+def download_pages(
+    cube: str,
+    municipality: str,
+    page_size: int,
+    max_pages: int,
+) -> dict[str, Any]:
+    """Download and combine multiple API pages."""
+    first_url = build_url(cube, municipality, page=1, page_size=page_size)
+    first_payload = fetch_json(first_url)
+
+    total_records = int(first_payload.get("total_fact_count", 0))
+    available_pages = calculate_page_count(total_records, page_size)
+    pages_to_download = min(available_pages, max_pages)
+
+    all_records = list(first_payload.get("data", []))
+
+    for page_number in range(2, pages_to_download + 1):
+        print(f"Downloading page {page_number} of {pages_to_download}...")
+        page_url = build_url(
+            cube,
+            municipality,
+            page=page_number,
+            page_size=page_size,
+        )
+        page_payload = fetch_json(page_url)
+        all_records.extend(page_payload.get("data", []))
+
+    combined_payload = dict(first_payload)
+    combined_payload["data"] = all_records
+    combined_payload["downloaded_fact_count"] = len(all_records)
+    combined_payload["downloaded_page_count"] = pages_to_download
+
+    return combined_payload
 
 
 def save_download(payload: dict[str, Any], output_path: Path, url: str) -> None:
@@ -77,21 +115,39 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=Path("data/bronze/treasury_cpt_income_expenditure.json"),
     )
+    parser.add_argument(
+    "--max-pages",
+    type=int,
+    default=1,
+    help="Maximum number of API pages to download",
+)
     return parser.parse_args()
+
 
 
 def main() -> None:
     """Run the downloader."""
     args = parse_args()
-    url = build_url(args.cube, args.municipality, args.page, args.page_size)
 
-    print(f"Downloading page {args.page} from Municipal Money...")
-    payload = fetch_json(url)
-    save_download(payload, args.output, url)
+    first_page_url = build_url(
+        args.cube,
+        args.municipality,
+        page=1,
+        page_size=args.page_size,
+    )
+
+    print("Starting Municipal Money download...")
+    payload = download_pages(
+        cube=args.cube,
+        municipality=args.municipality,
+        page_size=args.page_size,
+        max_pages=args.max_pages,
+    )
+
+    save_download(payload, args.output, first_page_url)
 
     print(f"Downloaded {len(payload.get('data', []))} records.")
     print(f"Raw data saved to {args.output}")
-
 
 if __name__ == "__main__":
     main()
